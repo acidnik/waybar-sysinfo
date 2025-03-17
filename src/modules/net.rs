@@ -83,6 +83,7 @@ impl SysinfoModule for Net {
             return;
         }
         self.networks.refresh(true);
+        self.last_update = now;
 
         for (dev, net) in self.networks.list() {
             let recv_per_sec = net.received() / dt.as_secs();
