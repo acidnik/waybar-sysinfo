@@ -92,7 +92,7 @@ impl SysinfoModule for Net {
                 .update(dev, recv_per_sec)
                 .max(self.max_limit.update(dev, send_per_sec));
             if max == 0 {
-                return;
+                continue;
             }
 
             let dev_send = dev.to_owned() + "_send";
