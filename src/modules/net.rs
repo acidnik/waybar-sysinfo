@@ -1,5 +1,5 @@
 use std::{
-    collections::{BinaryHeap, HashMap},
+    collections::{HashMap, VecDeque},
     time::Instant,
 };
 
@@ -13,21 +13,21 @@ use crate::{
 
 #[derive(Default)]
 struct AutoMax {
-    inner: HashMap<String, BinaryHeap<u64>>,
+    inner: HashMap<String, VecDeque<u64>>,
 }
 
 impl AutoMax {
     fn update(&mut self, dev: &str, value: u64) -> u64 {
         let queue = self.inner.entry(dev.to_owned()).or_default();
-        queue.push(value);
+        queue.push_back(value);
 
         // TODO config instead of hardcoded?
-        let val = if queue.len() >= 10 {
-            queue.pop().unwrap()
-        } else {
-            *queue.peek().unwrap()
-        };
-        if val < 5_000 { 5_000 } else { val }
+        if queue.len() > 10 {
+            queue.pop_front();
+        }
+        // can we do better than O(N)?
+        let max = *queue.iter().max().unwrap_or(&5000);
+        if max < 5000 { 5000 } else { max }
     }
 }
 
