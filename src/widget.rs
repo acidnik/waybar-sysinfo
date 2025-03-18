@@ -69,7 +69,7 @@ impl Widget {
 
         BUTTON_CSS_PROVIDER.with(|provider| {
             box_.style_context()
-                .add_provider(provider, gtk::STYLE_PROVIDER_PRIORITY_USER);
+                .add_provider(provider, gtk::STYLE_PROVIDER_PRIORITY_APPLICATION);
 
             box_.style_context().add_class(label_str);
             // TODO: use config.<module>.label
