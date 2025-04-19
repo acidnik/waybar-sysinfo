@@ -26,8 +26,7 @@ impl AutoMax {
             queue.pop_front();
         }
         // can we do better than O(N)?
-        let max = *queue.iter().max().unwrap_or(&5000);
-        if max < 5000 { 5000 } else { max }
+        (*queue.iter().max().unwrap_or(&5000)).max(5000)
     }
 }
 

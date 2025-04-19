@@ -85,7 +85,7 @@ impl MeasureCollector {
     }
 
     pub fn update(&mut self) {
-        eprintln!("sysinfo: update started");
+        // eprintln!("sysinfo: update started");
         for module in self.modules.iter_mut() {
             module.update(&mut self.measures);
         }
