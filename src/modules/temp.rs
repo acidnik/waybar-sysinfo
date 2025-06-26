@@ -98,7 +98,7 @@ impl SysinfoModule for Temp {
             let name = format!("temp_max_{i}");
             let measure = measures.entry(name.clone()).or_insert(Measure::new(&name));
             measure.value = (c.1 / c.2 * 100.0) as f64;
-            measure.tooltip = format!("max: {} {}C / {}C", c.0, c.1, c.2);
+            measure.tooltip = format!("max: {} [ {}C / {}C ]", c.0, c.1, c.2);
         }
 
         // get just values
@@ -106,7 +106,7 @@ impl SysinfoModule for Temp {
             if self.labels.contains(&c.0) {
                 let measure = measures.entry(c.0.clone()).or_insert(Measure::new(&c.0));
                 measure.value = (c.1 / c.2 * 100.0) as f64;
-                measure.tooltip = format!("{}: {}C / {}C", c.0, c.1, c.2)
+                measure.tooltip = format!("{}: [ {}C / {}C ]", c.0, c.1, c.2)
             }
         }
     }
