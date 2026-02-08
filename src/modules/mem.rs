@@ -43,7 +43,12 @@ impl SysinfoModule for Mem {
         let measure = measures
             .entry("swap".to_owned())
             .or_insert(Measure::new("swap"));
-        measure.value = self.sysinfo.used_swap() as f64 / self.sysinfo.total_swap() as f64 * 100.0;
+        if self.sysinfo.total_swap() == 0 {
+            measure.value = 0.0
+        } else {
+            measure.value =
+                self.sysinfo.used_swap() as f64 / self.sysinfo.total_swap() as f64 * 100.0;
+        }
         measure.tooltip = format!(
             "swap: {} used / {} free / {} total",
             format_size(self.sysinfo.used_swap(), DECIMAL),
