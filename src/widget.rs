@@ -71,6 +71,7 @@ impl Widget {
             box_.style_context()
                 .add_provider(provider, gtk::STYLE_PROVIDER_PRIORITY_APPLICATION);
 
+            box_.style_context().add_class("sysinfo-module");
             box_.style_context().add_class(label_str);
             // TODO: use config.<module>.label
             let label = gtk::Label::new(Some(label_str));

@@ -106,10 +106,17 @@ Other useful information and examples for styling:
 }
 
 /**
- * The separate widgets are selectable by their label
+ * The separate widgets are selectable with `.sysinfo-module`
+ */
+#sysinfo .sysinfo-module + .sysinfo-module {
+  margin-left: 10px;
+}
+
+/**
+ * The separate widgets also have a class for their label
  * (beware that this changes if the label is set to a custom value)
  */
-#sysinfo .sysinfo-module.mem, #sysinfo .sysinfo-module.my-custom-network-label {
-  margin-left: 10px;
+#sysinfo .sysinfo-module.cpu progress {
+  background-color: blue;
 }
 ```
