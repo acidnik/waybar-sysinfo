@@ -48,15 +48,6 @@ cp target/release/libwaybar_sysinfo.so ~/.local/lib/
         // show max value for each regex
         "show_max": ["Core .*"]
     },
-    // please copy this section as is
-    "apps": {
-      "signal": [
-        {
-          "match": "\\([0-9]+\\)$",
-          "class": "unread"
-        }
-      ]
-    },
 },
 ```
 
