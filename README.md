@@ -131,4 +131,17 @@ Other useful information and examples for styling:
 #sysinfo .sysinfo-bar.gte-70 progress { background-color: yellow; }
 #sysinfo .sysinfo-bar.gte-80 progress { background-color: orange; }
 #sysinfo .sysinfo-bar.gte-90 progress { background-color: red; }
+
+/**
+ * Bars might be rounded by default; radius can be adjusted,
+ * separately for `trough` and `progress`
+ */
+#sysinfo trough, #sysinfo progress {
+  border-radius: 0px; /* for no rounding */
+  border-radius: 2px; /* for a fixed radius */
+  border-radius: 1000px; /* or some other high number for as close to circular as possible */
+
+  /* Or you can control the different corners separately */
+  border-top-radius: 1000px 1000px 0px 0px; /* for curved tops and flat bottoms */
+}
 ```
