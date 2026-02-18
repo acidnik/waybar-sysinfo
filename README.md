@@ -123,4 +123,12 @@ Other useful information and examples for styling:
  * The separate widgets also have a class for their custom label
  */
 #sysinfo .sysinfo-module.my-label progress { ... }
+
+/**
+ * Bars are given classes `gte-10`...`gte-90` for how full they are,
+ * allowing colors or other styling to change accordingly
+ */
+#sysinfo .sysinfo-bar.gte-70 progress { background-color: yellow; }
+#sysinfo .sysinfo-bar.gte-80 progress { background-color: orange; }
+#sysinfo .sysinfo-bar.gte-90 progress { background-color: red; }
 ```

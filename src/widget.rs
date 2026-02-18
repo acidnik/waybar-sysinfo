@@ -117,6 +117,14 @@ impl Widget {
                 }
                 let bar = &self.bar[i];
                 bar.set_fraction(measure.value / 100.0);
+                for i in (10..100).step_by(10) {
+                    let class_str = format!("gte-{i}");
+                    if measure.value >= i as f64 {
+                        bar.style_context().add_class(&class_str);
+                    } else {
+                        bar.style_context().remove_class(&class_str);
+                    }
+                }
             }
         }
 
