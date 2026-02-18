@@ -64,7 +64,7 @@ thread_local! {
 }
 
 impl Widget {
-    pub fn new(label_str: &str, show_str: &[String]) -> Self {
+    pub fn new(module_str: &str, label_str: &str, show_str: &[String]) -> Self {
         let box_ = gtk::Box::new(gtk::Orientation::Horizontal, 0);
 
         BUTTON_CSS_PROVIDER.with(|provider| {
@@ -72,6 +72,7 @@ impl Widget {
                 .add_provider(provider, gtk::STYLE_PROVIDER_PRIORITY_APPLICATION);
 
             box_.style_context().add_class("sysinfo-module");
+            box_.style_context().add_class(module_str);
             box_.style_context().add_class(label_str);
             // TODO: use config.<module>.label
             let label = gtk::Label::new(Some(label_str));

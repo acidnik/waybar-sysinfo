@@ -50,7 +50,7 @@ impl MeasureCollector {
             let labels = module.labels();
             modules.push(Box::new(module));
 
-            let widget = Widget::new(&cpu_config.label, &labels);
+            let widget = Widget::new("cpu", &cpu_config.label, &labels);
             widgets.push(widget);
         }
         if let Some(ref mem_config) = config.mem {
@@ -58,7 +58,7 @@ impl MeasureCollector {
             let labels = module.labels();
             modules.push(Box::new(module));
 
-            let widget = Widget::new(&mem_config.label, &labels);
+            let widget = Widget::new("mem", &mem_config.label, &labels);
             widgets.push(widget);
         }
         if let Some(ref net_config) = config.net {
@@ -66,7 +66,7 @@ impl MeasureCollector {
             let labels = module.labels();
             modules.push(Box::new(module));
 
-            let widget = Widget::new(&net_config.label, &labels);
+            let widget = Widget::new("net", &net_config.label, &labels);
             widgets.push(widget);
         }
         if let Some(ref temp_config) = config.temp {
@@ -74,7 +74,7 @@ impl MeasureCollector {
             let labels = module.labels();
             modules.push(Box::new(module));
 
-            let widget = Widget::new(&temp_config.label, &labels);
+            let widget = Widget::new("temp", &temp_config.label, &labels);
             widgets.push(widget);
         }
         MeasureCollector {

@@ -113,10 +113,14 @@ Other useful information and examples for styling:
 }
 
 /**
- * The separate widgets also have a class for their label
- * (beware that this changes if the label is set to a custom value)
+ * The separate widgets also have a class for their type
  */
 #sysinfo .sysinfo-module.cpu progress {
   background-color: blue;
 }
+
+/**
+ * The separate widgets also have a class for their custom label
+ */
+#sysinfo .sysinfo-module.my-label progress { ... }
 ```
