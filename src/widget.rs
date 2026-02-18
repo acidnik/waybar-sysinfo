@@ -16,38 +16,38 @@ pub struct Widget {
 }
 
 const DEFAULT_CSS: &str = r#"
-.sysinfo-bar {
+#sysinfo .sysinfo-bar {
     padding-left: 5px;
     padding-top: 5px;
     padding-bottom: 5px;
 }
 
 /* progress bar */
-trough {
+#sysinfo trough {
     min-height: 3px;
     min-width: 7px;
     border: none;
 }
 
 /* colored part of progress bar */
-progress {
+#sysinfo progress {
     border: none;
     min-width: 7px;
 }
 
-.cpu progress {
+#sysinfo .cpu progress {
   background-color: #d20f39;
 }
 
-.mem progress {
+#sysinfo .mem progress {
   background-color: #40a02b;
 }
 
-.net progress {
+#sysinfo .net progress {
   background-color: #1e66f5;
 }
 
-.temp progress {
+#sysinfo .temp progress {
   background-color: #df8e1d;
 }
 "#;

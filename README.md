@@ -59,38 +59,38 @@ cp target/release/libwaybar_sysinfo.so ~/.local/lib/
 This is the default config
 
 ```css
-.sysinfo-bar {
+#sysinfo .sysinfo-bar {
     padding-left: 5px;
     padding-top: 5px;
     padding-bottom: 5px;
 }
 
 /* progress bar */
-trough {
+#sysinfo trough {
     min-height: 3px;
     min-width: 7px;
     border: none;
 }
 
 /* colored part of progress bar */
-progress {
+#sysinfo progress {
     border: none;
     min-width: 7px;
 }
 
-.cpu progress {
+#sysinfo .cpu progress {
   background-color: #d20f39;
 }
 
-.mem progress {
+#sysinfo .mem progress {
   background-color: #40a02b;
 }
 
-.net progress {
+#sysinfo .net progress {
   background-color: #1e66f5;
 }
 
-.temp progress {
+#sysinfo .temp progress {
   background-color: #df8e1d;
 }
 ```
@@ -99,9 +99,9 @@ Other useful information and examples for styling:
 
 ```css
 /**
- * The whole module is selectable with `.sysinfo`
+ * The whole module is selectable with `#sysinfo`
  */
-.sysinfo {
+#sysinfo {
   background-color: green;
 }
 
@@ -109,7 +109,7 @@ Other useful information and examples for styling:
  * The separate widgets are selectable by their label
  * (beware that this changes if the label is set to a custom value)
  */
-.sysinfo-module.mem, .sysinfo-module.my-custom-network-label {
+#sysinfo .sysinfo-module.mem, #sysinfo .sysinfo-module.my-custom-network-label {
   margin-left: 10px;
 }
 ```
