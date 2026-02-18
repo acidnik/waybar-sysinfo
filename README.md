@@ -94,3 +94,22 @@ progress {
   background-color: #df8e1d;
 }
 ```
+
+Other useful information and examples for styling:
+
+```css
+/**
+ * The whole module is selectable with `.sysinfo`
+ */
+.sysinfo {
+  background-color: green;
+}
+
+/**
+ * The separate widgets are selectable by their label
+ * (beware that this changes if the label is set to a custom value)
+ */
+.sysinfo-module.mem, .sysinfo-module.my-custom-network-label {
+  margin-left: 10px;
+}
+```
