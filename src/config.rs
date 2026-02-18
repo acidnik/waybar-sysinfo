@@ -36,6 +36,7 @@ pub struct ConfigNet {
     #[serde_inline_default("net".to_string())]
     pub label: String,
     pub show: Vec<String>,
+    pub floor: Option<u64>,
 }
 
 #[serde_inline_default]
