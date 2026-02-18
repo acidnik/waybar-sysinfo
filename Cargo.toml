@@ -1,5 +1,6 @@
 [package]
 name = "waybar-sysinfo"
+description = "Plugin for waybar that displays system info as vertical bars"
 version = "0.1.0"
 edition = "2024"
 
