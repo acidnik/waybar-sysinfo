@@ -32,17 +32,21 @@ cp target/release/libwaybar_sysinfo.so ~/.local/lib/
     // refresh interval in milliseconds
     "interval_ms": 5000,
     "cpu": {
+        "label": "cpu", // "cpu" is default; you could change this to an icon
         // show most loaded core, avg of all cores or all cores
         "show": ["max_core", "avg_core", "all_cores"]
     },
     "mem": {
+        "label": "ram", // "ram" is default
         "show": ["mem", "swap"]
     },
     "net": {
+        "label": "net", // "net" is default
         // show all networks that match this regexes
         "show": ["eno\\d+", "wlan\\d+"]
     },
     "temp": {
+        "label": "temp", // "temp" is default
         // show sensor with this name. you can see the list by running `sensors`
         "show": ["Core 1"]
         // show max value for each regex
