@@ -43,7 +43,11 @@ cp target/release/libwaybar_sysinfo.so ~/.local/lib/
     "net": {
         "label": "net", // "net" is default
         // show all networks that match this regexes
-        "show": ["eno\\d+", "wlan\\d+"]
+        "show": ["eno\\d+", "wlan\\d+"],
+        // set a floor for the maximum throughput value
+        // ("100%" on the bars, automatically adjusted upwards
+        // within a sliding window)
+        "floor": 1048576 // in bytes per second, default 5000
     },
     "temp": {
         "label": "temp", // "temp" is default

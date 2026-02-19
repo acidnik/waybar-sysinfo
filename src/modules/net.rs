@@ -14,9 +14,17 @@ use crate::{
 #[derive(Default)]
 struct AutoMax {
     inner: HashMap<String, VecDeque<u64>>,
+    floor: u64,
 }
 
 impl AutoMax {
+    fn new(floor: u64) -> Self {
+        Self {
+            inner: Default::default(),
+            floor,
+        }
+    }
+
     fn update(&mut self, dev: &str, value: u64) -> u64 {
         let queue = self.inner.entry(dev.to_owned()).or_default();
         queue.push_back(value);
@@ -26,7 +34,7 @@ impl AutoMax {
             queue.pop_front();
         }
         // can we do better than O(N)?
-        (*queue.iter().max().unwrap_or(&5000)).max(5000)
+        (*queue.iter().max().unwrap_or(&self.floor)).max(self.floor)
     }
 }
 
@@ -41,7 +49,7 @@ impl Net {
     pub fn new(config: &ConfigNet) -> Self {
         let networks = sysinfo::Networks::new_with_refreshed_list();
         let last_update = Instant::now();
-        let max_limit = Default::default();
+        let max_limit = AutoMax::new(config.floor.unwrap_or(5000));
 
         // config.show is a vec of regex; transform it into list of dev1_send, dev1_recv, ...
         let labels = config
