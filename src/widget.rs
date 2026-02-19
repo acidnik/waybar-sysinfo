@@ -16,38 +16,38 @@ pub struct Widget {
 }
 
 const DEFAULT_CSS: &str = r#"
-.sysinfo-bar {
+#sysinfo .sysinfo-bar {
     padding-left: 5px;
     padding-top: 5px;
     padding-bottom: 5px;
 }
 
 /* progress bar */
-trough {
+#sysinfo trough {
     min-height: 3px;
     min-width: 7px;
     border: none;
 }
 
 /* colored part of progress bar */
-progress {
+#sysinfo progress {
     border: none;
     min-width: 7px;
 }
 
-.cpu progress {
+#sysinfo .cpu progress {
   background-color: #d20f39;
 }
 
-.mem progress {
+#sysinfo .mem progress {
   background-color: #40a02b;
 }
 
-.net progress {
+#sysinfo .net progress {
   background-color: #1e66f5;
 }
 
-.temp progress {
+#sysinfo .temp progress {
   background-color: #df8e1d;
 }
 "#;
@@ -64,13 +64,15 @@ thread_local! {
 }
 
 impl Widget {
-    pub fn new(label_str: &str, show_str: &[String]) -> Self {
+    pub fn new(module_str: &str, label_str: &str, show_str: &[String]) -> Self {
         let box_ = gtk::Box::new(gtk::Orientation::Horizontal, 0);
 
         BUTTON_CSS_PROVIDER.with(|provider| {
             box_.style_context()
                 .add_provider(provider, gtk::STYLE_PROVIDER_PRIORITY_APPLICATION);
 
+            box_.style_context().add_class("sysinfo-module");
+            box_.style_context().add_class(module_str);
             box_.style_context().add_class(label_str);
             // TODO: use config.<module>.label
             let label = gtk::Label::new(Some(label_str));
@@ -115,6 +117,14 @@ impl Widget {
                 }
                 let bar = &self.bar[i];
                 bar.set_fraction(measure.value / 100.0);
+                for i in (10..100).step_by(10) {
+                    let class_str = format!("gte-{i}");
+                    if measure.value >= i as f64 {
+                        bar.style_context().add_class(&class_str);
+                    } else {
+                        bar.style_context().remove_class(&class_str);
+                    }
+                }
             }
         }
 

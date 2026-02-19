@@ -19,7 +19,7 @@ use waybar_cffi::{
     gtk::{
         self, Orientation,
         glib::MainContext,
-        traits::{ContainerExt, StyleContextExt, WidgetExt},
+        traits::{ContainerExt, WidgetExt},
     },
     waybar_module,
 };
@@ -48,7 +48,7 @@ waybar_module!(SysinfoModule);
 fn init(info: &waybar_cffi::InitInfo, config: Config) {
     let root = info.get_root_widget();
     let container = gtk::Box::new(Orientation::Horizontal, 0);
-    container.style_context().add_class("sysinfo");
+    container.set_widget_name("sysinfo");
     root.add(&container);
 
     let context = MainContext::default();

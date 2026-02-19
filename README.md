@@ -32,30 +32,25 @@ cp target/release/libwaybar_sysinfo.so ~/.local/lib/
     // refresh interval in milliseconds
     "interval_ms": 5000,
     "cpu": {
+        "label": "cpu", // "cpu" is default; you could change this to an icon
         // show most loaded core, avg of all cores or all cores
         "show": ["max_core", "avg_core", "all_cores"]
     },
     "mem": {
+        "label": "ram", // "ram" is default
         "show": ["mem", "swap"]
     },
     "net": {
+        "label": "net", // "net" is default
         // show all networks that match this regexes
         "show": ["eno\\d+", "wlan\\d+"]
     },
     "temp": {
+        "label": "temp", // "temp" is default
         // show sensor with this name. you can see the list by running `sensors`
         "show": ["Core 1"]
         // show max value for each regex
         "show_max": ["Core .*"]
-    },
-    // please copy this section as is
-    "apps": {
-      "signal": [
-        {
-          "match": "\\([0-9]+\\)$",
-          "class": "unread"
-        }
-      ]
     },
 },
 ```
@@ -64,38 +59,89 @@ cp target/release/libwaybar_sysinfo.so ~/.local/lib/
 This is the default config
 
 ```css
-.sysinfo-bar {
+#sysinfo .sysinfo-bar {
     padding-left: 5px;
     padding-top: 5px;
     padding-bottom: 5px;
 }
 
 /* progress bar */
-trough {
+#sysinfo trough {
     min-height: 3px;
     min-width: 7px;
     border: none;
 }
 
 /* colored part of progress bar */
-progress {
+#sysinfo progress {
     border: none;
     min-width: 7px;
 }
 
-.cpu progress {
+#sysinfo .cpu progress {
   background-color: #d20f39;
 }
 
-.mem progress {
+#sysinfo .mem progress {
   background-color: #40a02b;
 }
 
-.net progress {
+#sysinfo .net progress {
   background-color: #1e66f5;
 }
 
-.temp progress {
+#sysinfo .temp progress {
   background-color: #df8e1d;
+}
+```
+
+Other useful information and examples for styling:
+
+```css
+/**
+ * The whole module is selectable with `#sysinfo`
+ */
+#sysinfo {
+  background-color: green;
+}
+
+/**
+ * The separate widgets are selectable with `.sysinfo-module`
+ */
+#sysinfo .sysinfo-module + .sysinfo-module {
+  margin-left: 10px;
+}
+
+/**
+ * The separate widgets also have a class for their type
+ */
+#sysinfo .sysinfo-module.cpu progress {
+  background-color: blue;
+}
+
+/**
+ * The separate widgets also have a class for their custom label
+ */
+#sysinfo .sysinfo-module.my-label progress { ... }
+
+/**
+ * Bars are given classes `gte-10`...`gte-90` for how full they are,
+ * allowing colors or other styling to change accordingly
+ */
+#sysinfo .sysinfo-bar.gte-70 progress { background-color: yellow; }
+#sysinfo .sysinfo-bar.gte-80 progress { background-color: orange; }
+#sysinfo .sysinfo-bar.gte-90 progress { background-color: red; }
+
+/**
+ * Bars might be rounded by default; radius can be adjusted,
+ * separately for `trough` and `progress`
+ */
+#sysinfo trough, #sysinfo progress {
+  border-radius: 0px; /* for no rounding */
+  border-radius: 2px; /* for a fixed radius */
+  border-radius: 1000px; /* or some other high number for as close to circular as possible */
+
+  /* Or you can control the different corners separately */
+  border-top-radius: 1000px 1000px 0px 0px; /* for curved tops and flat bottoms */
 }
 ```
