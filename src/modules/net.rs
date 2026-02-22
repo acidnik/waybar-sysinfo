@@ -50,7 +50,7 @@ impl Net {
     pub fn new(config: &ConfigNet) -> Self {
         let networks = sysinfo::Networks::new_with_refreshed_list();
         let last_update = Instant::now();
-        let max_limit = AutoMax::new(config.floor.unwrap_or(5000));
+        let max_limit = AutoMax::new(config.floor.unwrap_or(2 * 1024 * 1024));
 
         // config.show is a vec of regex; transform it into list of dev1_send, dev1_recv, ...
         let labels = config
