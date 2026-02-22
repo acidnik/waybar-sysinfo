@@ -43,6 +43,7 @@ pub struct Net {
     last_update: Instant,
     max_limit: AutoMax,
     labels: Vec<String>,
+    gamma: f64,
 }
 
 impl Net {
@@ -74,7 +75,15 @@ impl Net {
             last_update,
             max_limit,
             labels,
+            gamma: config.gamma.unwrap_or(0.25),
         }
+    }
+
+    fn scale_value(&self, value: f64, max: f64) -> f64 {
+        if max <= 0.0 {
+            return 0.0;
+        }
+        (value / max).clamp(0.0, 1.0).powf(self.gamma)
     }
 }
 
@@ -107,13 +116,13 @@ impl SysinfoModule for Net {
             let measure = measures
                 .entry(dev_send.clone())
                 .or_insert(Measure::new(&dev_send));
-            measure.value = send_per_sec as f64 / max as f64 * 100.0;
+            measure.value = self.scale_value(send_per_sec as f64, max as f64) * 100.0;
 
             let dev_recv = dev.to_owned() + "_recv";
             let measure = measures
                 .entry(dev_recv.clone())
                 .or_insert(Measure::new(&dev_recv));
-            measure.value = recv_per_sec as f64 / max as f64 * 100.0;
+            measure.value = self.scale_value(recv_per_sec as f64, max as f64) * 100.0;
 
             measure.tooltip = format!(
                 "{dev}: {} in / {} out",
