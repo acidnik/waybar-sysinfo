@@ -30,6 +30,14 @@ pub struct ConfigMem {
     pub show: Vec<String>,
 }
 
+#[derive(Deserialize, Clone)]
+#[serde(tag = "type", rename_all = "snake_case")]
+pub enum ConfigNetScaling {
+    Linear,
+    Power { exponent: f64 },
+    LogPower { exponent: f64 },
+}
+
 #[serde_inline_default]
 #[derive(Deserialize)]
 pub struct ConfigNet {
@@ -37,6 +45,8 @@ pub struct ConfigNet {
     pub label: String,
     pub show: Vec<String>,
     pub floor: Option<u64>,
+    #[serde_inline_default(ConfigNetScaling::LogPower { exponent: 4.0 })]
+    pub scaling: ConfigNetScaling,
 }
 
 #[serde_inline_default]
