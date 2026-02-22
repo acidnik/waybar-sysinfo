@@ -37,6 +37,7 @@ pub struct ConfigNet {
     pub label: String,
     pub show: Vec<String>,
     pub floor: Option<u64>,
+    pub gamma: Option<f64>,
 }
 
 #[serde_inline_default]

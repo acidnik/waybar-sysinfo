@@ -47,7 +47,9 @@ cp target/release/libwaybar_sysinfo.so ~/.local/lib/
         // set a floor for the maximum throughput value
         // ("100%" on the bars, automatically adjusted upwards
         // within a sliding window)
-        "floor": 1048576 // in bytes per second, default 5000
+        "floor": 1048576, // in bytes per second, default 2097152 (2MB/s)
+        // set gamma to make small throughput more visible
+        "gamma": 0.5, // 1 is linear (go smaller to boost low values), default 0.25
     },
     "temp": {
         "label": "temp", // "temp" is default
