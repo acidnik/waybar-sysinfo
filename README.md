@@ -23,49 +23,88 @@ cp target/release/libwaybar_sysinfo.so ~/.local/lib/
 ```
 
 ## Config
+
+1.  Add the module (identified by `cffi/sysinfo`) to your bar as you would with any other module.
+
+    For example:
+
+    ```jsonc
+    "modules-right": [
+        "cffi/sysinfo",
+    ],
+    ```
+
+2.  Add your configuration for the module (again identified by `cffi/sysinfo`),
+    with options described in the table below.
+
+    Almost-minimal example:
+
+    ```jsonc
+    "cffi/sysinfo": {
+        "module_path": "/home/YOUR-USER/.local/lib/libwaybar_sysinfo.so",
+        "cpu": {
+            "show": ["avg_core"],
+        },
+        "mem": {
+            "show": ["mem"]
+        },
+    },
+    ```
+
+### Configuration options
+
+| Field            | Type    | Default      | Description |
+| ---------------- | ------- | ------------ | ----------- |
+| `module_path`    | string  | none; **required** | Path to the `libwaybar_sysinfo.so` module (absolute, or relative to waybar's CWD) |
+| `interval_ms`    | integer | `5000`       | Refresh interval in milliseconds |
+| `cpu`            | object  | absent       | Configuration for CPU monitor; leave absent for none |
+| `cpu.label`      | string  | `cpu`        | Label for CPU monitor; it could be an icon if you have Nerdfonts or similar |
+| `cpu.show`       | array with allowed values `max_core`, `avg_core`, `all_cores` | none; **required** | Specific CPU monitors to show; `max_core`: most loaded core; `avg_core`: average load of all cores; `all_cores`: separate bars for each core |
+| `mem`            | object  | absent       | Configuration for memory monitor; leave absent for none |
+| `mem.label`      | string  | `mem`        | Label for memory monitor; it could be an icon if you have Nerdfonts or similar |
+| `mem.show`       | array with allowed values `mem`, `swap` | none; **required** | Specific memory monitors to show; `mem`: used memory; `swap`: used swap |
+| `net`            | object  | absent       | Configuration for network monitor; leave absent for none |
+| `net.label`      | string  | `net`        | Label for network monitor; it could be an icon if you have Nerdfonts or similar |
+| `net.show`       | array of regex strings | none; **required** | Network interfaces to monitor, as regexes (which are not implicitly anchored) |
+| `net.floor`      | integer | `2097152`    | Minimum value to use for the maximum throughput rate, in bytes per second; automatically increased where necessary within a sliding window |
+| `net.scaling`    | object  | `{ "type": "log_power", "exponent": 4 }` | Scale mapping to use for network throughput |
+| `net.scaling.type` | string with allowed values `linear`, `power`, `log_power` | none; **required** | Type of scaling to use; `linear`: linear relationship (`rate/max`); `power`: exponential relationship (`(rate/max)^exponent`); `log_power`: logarithmic relationship (`(log(rate+1)/log(max+1))^exponent`) |
+| `net.scaling.exponent` | float | unsupported for `linear`, **required** for `power` and `log_power` | Exponent to use for `power` or `log_power` scaling; for `power` an exponent of 1 would be the same as `linear`, and the closer to zero, the more small throughput is visually boosted (try 0.33); for `log_power` pick numbers greater than zero, with larger numbers boosting small throughputs less (try 4) |
+| `temp`           | object  | absent       | Configuration for temperature monitor; leave absent for none |
+| `temp.label`     | string  | `temp`       | Label for temperature monitor; it could be an icon if you have Nerdfonts of similar |
+| `temp.show`      | array of strings | empty | Temperature sensors to show by exact name (find with `sensors`) |
+| `temp.show_max`  | array of regex strings | empty | Sets of sensor names matched by regex to aggregate into single bars showing the maximum of each set |
+
+### Configuration example
+
+Note that defaults are above.
+Nothing in the following configuration is default,
+in order to highlight some reasonable non-default settings.
+
 ```jsonc
-"modules-right": [
-    "cffi/sysinfo",
-]
 "cffi/sysinfo": {
     "module_path": "/home/USER/.local/lib/libwaybar_sysinfo.so",
-    // refresh interval in milliseconds
-    "interval_ms": 5000,
+    "interval_ms": 2000,
     "cpu": {
-        "label": "cpu", // "cpu" is default; you could change this to an icon
-        // show most loaded core, avg of all cores or all cores
-        "show": ["max_core", "avg_core", "all_cores"]
+        "label": "\uf4bc", // same as literal ""
+        "show": ["max_core", "avg_core"],
     },
     "mem": {
-        "label": "ram", // "ram" is default
-        "show": ["mem", "swap"]
+        "label": "\uefc5", // same as literal ""
+        "show": ["mem", "swap"],
     },
     "net": {
-        "label": "net", // "net" is default
-        // show all networks that match this regexes
-        "show": ["eno\\d+", "wlan\\d+"],
-        // set a floor for the maximum throughput value
-        // ("100%" on the bars, automatically adjusted upwards
-        // within a sliding window)
-        "floor": 1048576, // in bytes per second, default 2097152 (2MB/s)
-        // set scaling strategy, for example to make small throughput more visible
+        "label": "\udb81\udef3", // same as literal "󰛳"
+        "show": ["^eno\\d+$", "^wlan\\d+$"], // naming conventions vary by distro; other examples: "^en", "^wl"; "." or empty string to match all
+        "floor": 12500000, // a full 100mbit pipe
         "scaling": {
-            "type": "log_power", // logarithmic relationship raised to a power, given by (log(rate+1)/log(max+1))^exponent
-            "exponent": 4, // higher values accentuate small throughput less
-        }
-        // other scaling options:
-        // "scaling": {
-        //     "type": "power", // exponential relationship given by (rate/max)^exponent
-        //     "exponent": 0.33, // 1 would be the same as "linear"; use values greater than 0 and less than 1 to boost small throughput
-        // }
-        // "scaling": { "type": "linear" } // linear relationship given by rate/max
+            "type": "power",
+            "exponent": 0.33,
+        },
     },
     "temp": {
-        "label": "temp", // "temp" is default
-        // show sensor with this name. you can see the list by running `sensors`
-        "show": ["Core 1"]
-        // show max value for each regex
-        "show_max": ["Core .*"]
+        "label": "\uf2c7", // same as literal ""
+        "show_max": ["^Core \\d+$"], // show one bar for the highest out of all "Core n" sensors
     },
 },
 ```
