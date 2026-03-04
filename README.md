@@ -47,7 +47,18 @@ cp target/release/libwaybar_sysinfo.so ~/.local/lib/
         // set a floor for the maximum throughput value
         // ("100%" on the bars, automatically adjusted upwards
         // within a sliding window)
-        "floor": 1048576 // in bytes per second, default 5000
+        "floor": 1048576, // in bytes per second, default 2097152 (2MB/s)
+        // set scaling strategy, for example to make small throughput more visible
+        "scaling": {
+            "type": "log_power", // logarithmic relationship raised to a power, given by (log(rate+1)/log(max+1))^exponent
+            "exponent": 4, // higher values accentuate small throughput less
+        }
+        // other scaling options:
+        // "scaling": {
+        //     "type": "power", // exponential relationship given by (rate/max)^exponent
+        //     "exponent": 0.33, // 1 would be the same as "linear"; use values greater than 0 and less than 1 to boost small throughput
+        // }
+        // "scaling": { "type": "linear" } // linear relationship given by rate/max
     },
     "temp": {
         "label": "temp", // "temp" is default

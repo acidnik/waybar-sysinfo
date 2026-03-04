@@ -7,9 +7,25 @@ use humansize::{DECIMAL, format_size};
 use regex::Regex;
 
 use crate::{
-    config::ConfigNet,
+    config::{ConfigNet, ConfigNetScaling},
     measure::{Measure, Measures, SysinfoModule},
 };
+
+impl ConfigNetScaling {
+    fn scale(&self, value: f64, max: f64) -> f64 {
+        if max <= 0.0 {
+            return if value <= 0.0 { 0.0 } else { 1.0 };
+        }
+        let scaled = match self {
+            ConfigNetScaling::Linear => value / max,
+            ConfigNetScaling::Power { exponent } => (value / max).powf(*exponent),
+            ConfigNetScaling::LogPower { exponent } => {
+                ((value + 1.0).ln() / (max + 1.0).ln()).powf(*exponent)
+            }
+        };
+        return scaled.clamp(0.0, 1.0);
+    }
+}
 
 #[derive(Default)]
 struct AutoMax {
@@ -43,13 +59,14 @@ pub struct Net {
     last_update: Instant,
     max_limit: AutoMax,
     labels: Vec<String>,
+    scaling: ConfigNetScaling,
 }
 
 impl Net {
     pub fn new(config: &ConfigNet) -> Self {
         let networks = sysinfo::Networks::new_with_refreshed_list();
         let last_update = Instant::now();
-        let max_limit = AutoMax::new(config.floor.unwrap_or(5000));
+        let max_limit = AutoMax::new(config.floor.unwrap_or(2 * 1024 * 1024));
 
         // config.show is a vec of regex; transform it into list of dev1_send, dev1_recv, ...
         let labels = config
@@ -74,6 +91,7 @@ impl Net {
             last_update,
             max_limit,
             labels,
+            scaling: config.scaling.clone(),
         }
     }
 }
@@ -107,13 +125,13 @@ impl SysinfoModule for Net {
             let measure = measures
                 .entry(dev_send.clone())
                 .or_insert(Measure::new(&dev_send));
-            measure.value = send_per_sec as f64 / max as f64 * 100.0;
+            measure.value = self.scaling.scale(send_per_sec as f64, max as f64) * 100.0;
 
             let dev_recv = dev.to_owned() + "_recv";
             let measure = measures
                 .entry(dev_recv.clone())
                 .or_insert(Measure::new(&dev_recv));
-            measure.value = recv_per_sec as f64 / max as f64 * 100.0;
+            measure.value = self.scaling.scale(recv_per_sec as f64, max as f64) * 100.0;
 
             measure.tooltip = format!(
                 "{dev}: {} in / {} out",
